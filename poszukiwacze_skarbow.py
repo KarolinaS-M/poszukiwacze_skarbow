@@ -6,6 +6,11 @@ st.set_page_config(
     layout="wide"
 )
 
+# Stałe – łączne zasoby
+TOTAL_ROPES = 4
+TOTAL_GUNS = 5
+TOTAL_BINOCS = 4   # TU POPRAWIONE: 4, bo 3 + 0 + 1
+
 # ---------- UTILITY FUNCTIONS (NIEWIDOCZNE DLA UCZNIÓW) ----------
 def u_IJ(x1, x2, x3):
     # Indiana Jones: u_IJ(x) = min{2x1, x2, 2x3}
@@ -22,34 +27,34 @@ def u_ND(x1, x2, x3):
 def generate_feasible_allocations():
     """
     Generuje wszystkie dopuszczalne alokacje:
-    - 4 liny
-    - 5 pistoletów
-    - 5 lornetek
+    - TOTAL_ROPES lin
+    - TOTAL_GUNS pistoletów
+    - TOTAL_BINOCS lornetek
     między 3 osoby (IJ, LC, ND).
     Zwraca listę trójek:
     ((IJ_l, LC_l, ND_l), (IJ_p, LC_p, ND_p), (IJ_lo, LC_lo, ND_lo))
     """
     allocations = []
 
-    # Liny: suma = 4
-    for IJ_l in range(5):
-        for LC_l in range(5 - IJ_l):
-            ND_l = 4 - IJ_l - LC_l
-            if ND_l < 0 or ND_l > 4:
+    # Liny: suma = TOTAL_ROPES
+    for IJ_l in range(TOTAL_ROPES + 1):
+        for LC_l in range(TOTAL_ROPES + 1 - IJ_l):
+            ND_l = TOTAL_ROPES - IJ_l - LC_l
+            if ND_l < 0 or ND_l > TOTAL_ROPES:
                 continue
 
-            # Pistolety: suma = 5
-            for IJ_p in range(6):
-                for LC_p in range(6 - IJ_p):
-                    ND_p = 5 - IJ_p - LC_p
-                    if ND_p < 0 or ND_p > 5:
+            # Pistolety: suma = TOTAL_GUNS
+            for IJ_p in range(TOTAL_GUNS + 1):
+                for LC_p in range(TOTAL_GUNS + 1 - IJ_p):
+                    ND_p = TOTAL_GUNS - IJ_p - LC_p
+                    if ND_p < 0 or ND_p > TOTAL_GUNS:
                         continue
 
-                    # Lornetki: suma = 5
-                    for IJ_lo in range(6):
-                        for LC_lo in range(6 - IJ_lo):
-                            ND_lo = 5 - IJ_lo - LC_lo
-                            if ND_lo < 0 or ND_lo > 5:
+                    # Lornetki: suma = TOTAL_BINOCS
+                    for IJ_lo in range(TOTAL_BINOCS + 1):
+                        for LC_lo in range(TOTAL_BINOCS + 1 - IJ_lo):
+                            ND_lo = TOTAL_BINOCS - IJ_lo - LC_lo
+                            if ND_lo < 0 or ND_lo > TOTAL_BINOCS:
                                 continue
 
                             allocations.append(
@@ -107,7 +112,7 @@ ALL_ALLOCATIONS = generate_feasible_allocations()
 st.title("Poszukiwacze skarbów – podział lin, pistoletów i lornetek")
 
 st.markdown(
-"""
+f"""
 Mamy trzech poszukiwaczy skarbów:
 
 - **Indiana Jones (IJ)**  
@@ -134,9 +139,9 @@ Początkowa alokacja dóbr (w kolejności: liny, pistolety, lornetki) jest nast�
 
 Łączne zasoby dostępne w grupie:
 
-- liny: **4**  
-- pistolety: **5**  
-- lornetki: **5**
+- liny: **{TOTAL_ROPES}**  
+- pistolety: **{TOTAL_GUNS}**  
+- lornetki: **{TOTAL_BINOCS}**
 
 **Twoje zadanie:**
 
@@ -153,14 +158,14 @@ col_IJ, col_LC, col_ND = st.columns([1, 1, 1])
 with col_IJ:
     st.subheader("Indiana Jones (IJ)")
     try:
-        st.image("indiana.png", use_column_width=False)   # oryginalny rozmiar
+        st.image("indiana.png", use_column_width=False)
     except Exception:
         st.info("Brak pliku **indiana.png** w katalogu aplikacji.")
 
     st.markdown("**Podział dóbr dla Indiany**")
-    IJ_liny = st.number_input("Liny (IJ)", min_value=0, max_value=4, value=1, step=1)
-    IJ_pisty = st.number_input("Pistolety (IJ)", min_value=0, max_value=5, value=0, step=1)
-    IJ_lornetki = st.number_input("Lornetki (IJ)", min_value=0, max_value=5, value=3, step=1)
+    IJ_liny = st.number_input("Liny (IJ)", min_value=0, max_value=TOTAL_ROPES, value=1, step=1)
+    IJ_pisty = st.number_input("Pistolety (IJ)", min_value=0, max_value=TOTAL_GUNS, value=0, step=1)
+    IJ_lornetki = st.number_input("Lornetki (IJ)", min_value=0, max_value=TOTAL_BINOCS, value=3, step=1)
 
 with col_LC:
     st.subheader("Lara Croft (LC)")
@@ -170,9 +175,9 @@ with col_LC:
         st.info("Brak pliku **lara.png** w katalogu aplikacji.")
 
     st.markdown("**Podział dóbr dla Lary**")
-    LC_liny = st.number_input("Liny (LC)", min_value=0, max_value=4, value=0, step=1)
-    LC_pisty = st.number_input("Pistolety (LC)", min_value=0, max_value=5, value=4, step=1)
-    LC_lornetki = st.number_input("Lornetki (LC)", min_value=0, max_value=5, value=0, step=1)
+    LC_liny = st.number_input("Liny (LC)", min_value=0, max_value=TOTAL_ROPES, value=0, step=1)
+    LC_pisty = st.number_input("Pistolety (LC)", min_value=0, max_value=TOTAL_GUNS, value=4, step=1)
+    LC_lornetki = st.number_input("Lornetki (LC)", min_value=0, max_value=TOTAL_BINOCS, value=0, step=1)
 
 with col_ND:
     st.subheader("Nathan Drake (ND)")
@@ -182,9 +187,9 @@ with col_ND:
         st.info("Brak pliku **nathan.png** w katalogu aplikacji.")
 
     st.markdown("**Podział dóbr dla Nathana**")
-    ND_liny = st.number_input("Liny (ND)", min_value=0, max_value=4, value=3, step=1)
-    ND_pisty = st.number_input("Pistolety (ND)", min_value=0, max_value=5, value=1, step=1)
-    ND_lornetki = st.number_input("Lornetki (ND)", min_value=0, max_value=5, value=1, step=1)
+    ND_liny = st.number_input("Liny (ND)", min_value=0, max_value=TOTAL_ROPES, value=3, step=1)
+    ND_pisty = st.number_input("Pistolety (ND)", min_value=0, max_value=TOTAL_GUNS, value=1, step=1)
+    ND_lornetki = st.number_input("Lornetki (ND)", min_value=0, max_value=TOTAL_BINOCS, value=1, step=1)
 
 st.markdown("---")
 
@@ -197,22 +202,22 @@ st.subheader("Sprawdzenie, czy podział jest dopuszczalny")
 
 cols_check = st.columns(3)
 with cols_check[0]:
-    if sum_liny == 4:
-        st.success(f"Liny: {sum_liny} / 4 – OK")
+    if sum_liny == TOTAL_ROPES:
+        st.success(f"Liny: {sum_liny} / {TOTAL_ROPES} – OK")
     else:
-        st.error(f"Liny: {sum_liny} / 4 – suma musi być równa 4")
+        st.error(f"Liny: {sum_liny} / {TOTAL_ROPES} – suma musi być równa {TOTAL_ROPES}")
 
 with cols_check[1]:
-    if sum_pisty == 5:
-        st.success(f"Pistolety: {sum_pisty} / 5 – OK")
+    if sum_pisty == TOTAL_GUNS:
+        st.success(f"Pistolety: {sum_pisty} / {TOTAL_GUNS} – OK")
     else:
-        st.error(f"Pistolety: {sum_pisty} / 5 – suma musi być równa 5")
+        st.error(f"Pistolety: {sum_pisty} / {TOTAL_GUNS} – suma musi być równa {TOTAL_GUNS}")
 
 with cols_check[2]:
-    if sum_lornetki == 5:
-        st.success(f"Lornetki: {sum_lornetki} / 5 – OK")
+    if sum_lornetki == TOTAL_BINOCS:
+        st.success(f"Lornetki: {sum_lornetki} / {TOTAL_BINOCS} – OK")
     else:
-        st.error(f"Lornetki: {sum_lornetki} / 5 – suma musi być równa 5")
+        st.error(f"Lornetki: {sum_lornetki} / {TOTAL_BINOCS} – suma musi być równa {TOTAL_BINOCS}")
 
 st.markdown("---")
 
@@ -256,7 +261,7 @@ if st.button("Policz poziom zadowolenia bohaterów"):
         )
     else:
         st.success(
-            "Nie można już bardziej zwiększyć użyteczności **Lary**, "
+            "Nie można już bardziej zwiększyć użyteczność **Lary**, "
             "nie zmniejszając przy tym użyteczności **Indiany ani Nathana**."
         )
 
@@ -269,7 +274,7 @@ if st.button("Policz poziom zadowolenia bohaterów"):
         )
     else:
         st.success(
-            "Nie można już bardziej zwiększyć użyteczności **Nathana**, "
+            "Nie można już bardziej zwiększyć użyteczność **Nathana**, "
             "nie zmniejszając przy tym użyteczności **Indiany ani Lary**."
         )
 
